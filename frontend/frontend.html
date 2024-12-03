@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo Fullstack Application || Shubhashish Chakraborty</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <style>
+        body {
+            background-color: #1B1833;
+            color: azure;
+        }
+
+        input {
+            font-weight: bolder;
+            padding: 5px;
+            border: 3px solid #F29F58;
+            border-radius: 10px;
+        }
+
+        button {
+            padding: 5px;
+            border-radius: 10px;
+        }
+
+        #heading {
+            text-align: center;
+        }
+
+        .sections {
+            margin: 20px;
+        }
+
+        .main {
+            display: flex;
+            justify-content: center;
+        }
+
+        #response-section {
+            background-color: #1A1A1D;
+            padding: 10px;
+            border-radius: 20px;
+            box-shadow: 0px 0px 15px 0.5px cyan;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 id="heading">Todo Fullstack Application</h1>
+    <div class="main">
+        <div>
+            <div class="sections" id="signup-section">
+                <input type="text" name="username" id="signup-username" placeholder="Enter Username:">
+                <input type="email" name="email" id="signup-email" placeholder="Enter Email:">
+                <input type="password" name="password" id="signup-password" placeholder="Enter Password:">
+
+                <button onclick="signup()">SignUP</button>
+            </div>
+
+            <div style="display: flex; justify-content: center;">
+                <div class="sections" id="signin-section">
+                    <input type="email" name="email" id="signup-email" placeholder="Enter Email:">
+                    <input type="password" name="password" id="signup-password" placeholder="Enter Password:">
+
+                    <button onclick="login()">LogIN</button>
+                </div>
+            </div>
+
+            <div id="response-section"></div>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.8/axios.min.js"></script>
+    <script>
+        async function signup() {
+            const response = await axios.post("http://localhost:3000/signup" , {
+                username: document.getElementById("signup-username").value,
+                email: document.getElementById("signup-email").value,
+                password: document.getElementById("signup-password").value
+            });
+
+            document.getElementById("response-section").innerHTML = `<h2>${response.data.msg}</h2>`;
+        }
+    </script>
+</body>
+
+</html>
