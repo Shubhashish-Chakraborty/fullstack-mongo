@@ -12,15 +12,16 @@
     git clone https://github.com/Shubhashish-Chakraborty/fullstack-mongo.git
 ```
 
-2. **Install all Dependencies**
+2. *Navigate to the Directory where `package.json` file is present: `(/backend)`*
+```bash
+    cd backend
+```
+
+3. **Install all Dependencies**
 ```bash
     npm i
 ```
 
-3. *Navigate to the Directory where `package.json` file is present: `(/backend)`*
-```bash
-    cd backend
-```
 
 4. **START THE SERVER:**
 ```bash
