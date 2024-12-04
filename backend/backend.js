@@ -85,4 +85,46 @@ app.post('/add-todo' , auth , async (req ,res) => {
 
 })
 
+// Authenticated Endpoint || Displaying the Todo Associated to the User on frontend!
+app.post('/show-todo', auth , async (req , res) => {
+    const userId = req.userId;
+
+    const todos = await TodoModel.find({ // this will be an array containing all the tasks of that user! []
+        userId: userId // Uss particular User ke todos show karega!!
+    });
+
+    const user = await UserModel.findOne({
+        _id: userId // Uss particular User ke details!
+    })
+
+    let finalResponse = {
+        todoData: todos,
+        username: user.username,
+        email: user.email
+    }
+
+    res.json(finalResponse);
+
+    // {
+    //     todoData: [
+    //       {
+    //         _id: new ObjectId('675032ff265fd4af137dba4a'),
+    //         title: 'shubh task',
+    //         done: true,
+    //         userId: new ObjectId('675032ed265fd4af137dba47'),
+    //         __v: 0
+    //       },
+    //       {
+    //         _id: new ObjectId('6750376bb458d3f6d31f42a5'),
+    //         title: 'shubh task2',
+    //         done: false,
+    //         userId: new ObjectId('675032ed265fd4af137dba47'),
+    //         __v: 0
+    //       }
+    //     ],
+    //     username: 'shubh',
+    //     email: 'shubh@gmail.com'
+    // }
+
+})
 app.listen(PORT);

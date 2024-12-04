@@ -83,6 +83,7 @@
                 </select>
 
                 <button onclick="addTodo()">Add Todo</button>
+                <button onclick="showTodo()">Show Todo</button>
             </div>
 
             <div id="response-section"></div>
@@ -132,12 +133,51 @@
                 },
                 {
                     headers: {
-                        token: localStorage.getItem('token'), // Set token in headers
+                        token: localStorage.getItem('token')
                     },
                 }
             );
-            
+
             document.getElementById("response-section").innerHTML = `<h2>${response.data.msg}</h2>`;
+        }
+
+        async function showTodo() {
+            const response = await axios.post(
+                "http://localhost:3000/show-todo",
+                {}, // Empty data object for POST
+                {
+                    headers: {
+                        token: localStorage.getItem('token')
+                    }
+                }
+            )
+            
+            document.getElementById("response-section").innerHTML = ""; // Clearing the Previous Content!
+            document.getElementById("response-section").innerHTML = `
+                <h1>${response.data.username}'s Todo List</h1>
+                <hr></hr>
+            `;
+            
+            response.data.todoData.forEach(todo => {
+
+                // Create a new div for each todo item
+                const todoDiv = document.createElement("div");
+                todoDiv.classList.add("todo-item"); // Add a class for styling
+
+                // Add the title and done status
+                todoDiv.innerHTML = `
+
+                    <h2>Title: ${todo.title}</h2>
+                    <h3>Done: ${todo.done ? "Yes" : "No"}</h3>
+                    
+                    <br></br>
+                    <hr></hr>
+                `;
+
+                // Append the todo item to the response section
+                document.getElementById("response-section").appendChild(todoDiv);
+            });
+
         }
     </script>
 </body>
