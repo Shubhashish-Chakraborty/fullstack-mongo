@@ -12,9 +12,9 @@
     git clone https://github.com/Shubhashish-Chakraborty/fullstack-mongo.git
 ```
 
-2. *Navigate to the Directory where `package.json` file is present: `(/backend)`*
+2. *Navigate to the Directory where `package.json` file is present: `(/fullstack-mongo/backend)`*
 ```bash
-    cd backend
+    cd fullstack-mongo/backend
 ```
 
 3. **Install all Dependencies**
