@@ -24,6 +24,7 @@
             border-radius: 10px;
             cursor: pointer;
         }
+
         button:hover {
             box-shadow: 0px 0px 20px 3px cadetblue;
         }
@@ -72,6 +73,18 @@
                 </div>
             </div>
 
+            <div class="sections" id="todo-section">
+                <h2 id="todo-user"></h2>
+                <input type="text" name="todoTitle" id="todo-title" placeholder="Todo Task:">
+
+                <select name="done" id="todo-done">
+                    <option value="false">Task Pending</option>
+                    <option value="true">Task Completed</option>
+                </select>
+
+                <button onclick="addTodo()">Add Todo</button>
+            </div>
+
             <div id="response-section"></div>
 
         </div>
@@ -79,8 +92,9 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.8/axios.min.js"></script>
     <script>
+        document.getElementById("todo-section").style.display = "none";
         async function signup() {
-            const response = await axios.post("http://localhost:3000/signup" , {
+            const response = await axios.post("http://localhost:3000/signup", {
                 username: document.getElementById("signup-username").value,
                 email: document.getElementById("signup-email").value,
                 password: document.getElementById("signup-password").value
@@ -90,13 +104,40 @@
         }
 
         async function login() {
-            const response = await axios.post("http://localhost:3000/signin" , {
+            const response = await axios.post("http://localhost:3000/signin", {
                 email: document.getElementById("signin-email").value,
-                password: document.getElementById("signin-password").value                
+                password: document.getElementById("signin-password").value
             })
 
-            localStorage.setItem('token' , response.data.token);
-            document.getElementById("response-section").innerHTML = `<h2>${response.data.msg}</h2>`;           
+            localStorage.setItem('token', response.data.token);
+            document.getElementById("response-section").innerHTML = `<h2>${response.data.msg}</h2>`;
+
+            document.getElementById("signup-section").style.display = "none"; // hiding the SIgnup Section When User is logged in!!
+
+            document.getElementById('todo-section').style.display = "block";
+
+            document.getElementById('todo-user').style.backgroundColor = "black"
+            document.getElementById('todo-user').style.textAlign = "center"
+            document.getElementById('todo-user').innerHTML = `Todo App || User: ${response.data.username}`;
+        }
+
+        async function addTodo() {
+            const doneValue = document.getElementById('todo-done').value === 'true';
+
+            const response = await axios.post(
+                "http://localhost:3000/add-todo",
+                {
+                    title: document.getElementById('todo-title').value, // Extract value
+                    done: doneValue
+                },
+                {
+                    headers: {
+                        token: localStorage.getItem('token'), // Set token in headers
+                    },
+                }
+            );
+            
+            document.getElementById("response-section").innerHTML = `<h2>${response.data.msg}</h2>`;
         }
     </script>
 </body>

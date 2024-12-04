@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 
-const { UserModel } = require('./db')
+const { UserModel , TodoModel } = require('./db')
 const {auth , JWT_SECRET} = require("./auth");
 
 const PORT = 3000;
@@ -57,11 +57,32 @@ app.post("/signin" , async (req , res) => {
         
         res.json({
             msg: `${user.username} successfully LoggedIN!!`,
+            username: user.username,
             token: token
         })
     }
 })
 
+// Authenticated endpoint || Adding Todo to database!
+app.post('/add-todo' , auth , async (req ,res) => {
+    const userId = req.userId;
+    const title = req.body.title;
+    const done = req.body.done;
+    
+    await TodoModel.create({
+        title: title,
+        done: done,
+        userId: userId
+    })
 
+    const user = await UserModel.findOne({
+        _id: userId
+    })
+
+    res.json({
+        msg: `${user.username}'s Todo Successfully Added!`
+    })
+
+})
 
 app.listen(PORT);
