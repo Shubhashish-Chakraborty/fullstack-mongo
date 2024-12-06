@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const path = require('path');
+const bcrypt = require("bcrypt");
 
 const { UserModel , TodoModel } = require('./db')
 const {auth , JWT_SECRET} = require("./auth");
@@ -23,15 +24,29 @@ app.post('/signup' , async (req , res) => {
     const email = req.body.email;
     const password = req.body.password;
 
-    await UserModel.create({
-        username: username,
-        email: email,
-        password: password
-    })
+    let errorFound = false;
+    try {
+        const hashedPassword = await bcrypt.hash(password , 8);
+    
+        await UserModel.create({
+            username: username,
+            email: email,
+            password: hashedPassword
+        })
+    }
+    catch (e) {
+        res.status(403).json({
+            msg: `User already exists with email: ${email}`
+        })
+        errorFound = true;
+    }
 
-    res.json({
-        msg: `${username} SuccessFully SignedUP!!`
-    })
+    if (!errorFound) { // If any error didn't occured!
+        res.json({
+            msg: `${username} SuccessFully SignedUP!!`
+        })
+    }
+
 })
 
 
