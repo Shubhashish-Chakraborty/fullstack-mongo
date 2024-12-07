@@ -57,15 +57,24 @@ app.post("/signin" , async (req , res) => {
 
     const user = await UserModel.findOne({
         email: email,
-        password: password
     })
 
     if (!user) { // If User Not Found!!
         res.status(403).json({
-            message: "User Not Found, Incorrect Credentials!!"
+            msg: `User with email:${email} does not exists in our database!`
+        });
+        return
+    }
+
+    // generating the hashed password and comparing it with the database's stored password!
+
+    const passwordMatched = await bcrypt.compare(password , user.password);
+    if (!passwordMatched) {
+        res.status(403).json({
+            message: "User Not Found, Incorrect Credentials Provided!!!"
         });
     }
-    else { // IF user found -> allot a JWT and login
+    else {
         const token = jwt.sign({
             id: user._id.toString()
         } , JWT_SECRET);
